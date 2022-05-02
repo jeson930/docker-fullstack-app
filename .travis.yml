@@ -1,0 +1,24 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t dockerjeson890930/react-test-app -f ./frontend/Dockerfile.dev ..frontend
+
+script:
+  - docker run -e CI=true dockerjeson890930/react-test-appnpm run test
+
+after_success:
+# docker image build
+  - docker build -t dockerjeson890930/docker-frontend ./frontend
+  - docker build -t dockerjeson890930/docker-backend ./backend
+  - docker build -t dockerjeson890930/docker-nginx ./nginx
+  # docker hub login
+  - echo "$DOCKER_HUB_PASSWORD" | docker logiin -u "$DOCKER_HUB_ID" --password-stdin
+  #push build image in docker hub
+  - docker push dockerjeson890930/docker-frontend
+  - docker push dockerjeson890930/docker-backend
+  - docker push dockerjeson890930/docker-nginx
