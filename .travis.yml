@@ -9,7 +9,7 @@ before_install:
   - docker build -t dockerjeson890930/react-test-app -f ./frontend/Dockerfile.dev ./frontend
 
 script:
-  - docker run -e CI=true dockerjeson890930/react-test-appnpm run test
+  - docker run -e CI=true dockerjeson890930/react-test-app npm run test
 
 after_success:
 # docker image build
